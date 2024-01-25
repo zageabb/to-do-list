@@ -24,26 +24,67 @@ def run():
         page_icon="👋",
     )
 
-    st.write("# Welcome to Streamlit! 👋")
+import streamlit as st
+import sqlite3
 
-    st.sidebar.success("Select a demo above.")
+# Create or connect to SQLite database
+conn = sqlite3.connect('todo.db')
+c = conn.cursor()
 
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
+# Create table if not exists
+c.execute('''
+          CREATE TABLE IF NOT EXISTS todo (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              task TEXT NOT NULL
+          )
+          ''')
+conn.commit()
+
+def add_task(task):
+    c.execute('INSERT INTO todo (task) VALUES (?)', (task,))
+    conn.commit()
+
+def get_tasks():
+    c.execute('SELECT * FROM todo')
+    tasks = c.fetchall()
+    return tasks
+
+def edit_task(task_id, new_task):
+    c.execute('UPDATE todo SET task=? WHERE id=?', (new_task, task_id))
+    conn.commit()
+
+# Streamlit app
+st.title('To-Do List App')
+
+# Add task
+new_task = st.text_input('Add a new task:')
+if st.button('Add Task'):
+    if new_task:
+        add_task(new_task)
+        st.success('Task added successfully!')
+    else:
+        st.warning('Please enter a task.')
+
+# List tasks
+tasks = get_tasks()
+if tasks:
+    st.write('### Current Tasks:')
+    for task in tasks:
+        st.write(f"{task[0]}. {task[1]}")
+
+# Edit task
+task_id_to_edit = st.text_input('Enter the task ID to edit:')
+new_task_content = st.text_input('Enter the new task content:')
+if st.button('Edit Task'):
+    if task_id_to_edit and new_task_content:
+        edit_task(int(task_id_to_edit), new_task_content)
+        st.success('Task edited successfully!')
+    else:
+        st.warning('Please enter both task ID and new task content.')
+
+# Close the connection
+conn.close()
+
     )
 
 
