@@ -57,11 +57,11 @@ def run():
     # Add task
     new_task = st.text_input('Add a new task:')
     if st.button('Add Task'):
-    if new_task:
-        add_task(new_task)
-        st.success('Task added successfully!')
-    else:
-        st.warning('Please enter a task.')
+        if new_task:
+            add_task(new_task)
+            st.success('Task added successfully!')
+        else:
+            st.warning('Please enter a task.')
 
     # List tasks
     tasks = get_tasks()
