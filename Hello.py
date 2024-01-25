@@ -51,8 +51,8 @@ def run():
         c.execute('UPDATE todo SET task=? WHERE id=?', (new_task, task_id))
         conn.commit()
 
-    def del_task(task_id):
-        c.execute('DELETE FROM todo WHERE id=?', (task_id))
+    def del_task(task_id2):
+        c.execute('DELETE FROM todo WHERE id=?', (task_id2))
         conn.commit()
 
     # Streamlit app
