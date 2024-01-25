@@ -52,7 +52,7 @@ def run():
         conn.commit()
 
     def del_task(task_id):
-        c.execute('DELETE todo WHERE id=?', (task_id))
+        c.execute('DELETE FROM todo WHERE id=?', (task_id))
         conn.commit()
 
     # Streamlit app
