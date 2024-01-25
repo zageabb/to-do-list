@@ -51,6 +51,10 @@ def run():
         c.execute('UPDATE todo SET task=? WHERE id=?', (new_task, task_id))
         conn.commit()
 
+    def del_task(task_id):
+        c.execute('DELETE todo WHERE id=?', (task_id))
+        conn.commit()
+
     # Streamlit app
     st.title('To-Do List App')
 
@@ -83,6 +87,15 @@ def run():
         else:
             st.warning('Please enter both task ID and new task content.')
 
+    # Delete task
+    task_id_to_delete = st.text_input('Enter the task ID to delete:')
+    if st.button('Delete Task'):
+        if task_id_to_delete:
+            del_task(int(task_id_to_delete))
+            st.success('Task deleted successfully!')
+        else:
+            st.warning('Please enter task ID to delete.')
+    
     # Close the connection
     conn.close()
 
