@@ -54,6 +54,14 @@ def run():
     # Streamlit app
     st.title('To-Do List App')
 
+    # List tasks
+    tasks = get_tasks()
+    if tasks:
+        st.write('### Current Tasks:')
+        for task in tasks:
+            st.write(f"{task[0]}. {task[1]}")
+
+    
     # Add task
     new_task = st.text_input('Add a new task:')
     if st.button('Add Task'):
@@ -63,12 +71,7 @@ def run():
         else:
             st.warning('Please enter a task.')
 
-    # List tasks
-    tasks = get_tasks()
-    if tasks:
-        st.write('### Current Tasks:')
-        for task in tasks:
-            st.write(f"{task[0]}. {task[1]}")
+
 
     # Edit task
     task_id_to_edit = st.text_input('Enter the task ID to edit:')
