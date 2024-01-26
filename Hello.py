@@ -91,7 +91,7 @@ def run():
     task_id_to_delete = st.text_input('Enter the task ID to delete:')
     if st.button('Delete Task'):
         if task_id_to_delete:
-            del_task(int(task_id_to_delete))
+            del_task(task_id_to_delete)
             st.success('Task deleted successfully!')
         else:
             st.warning('Please enter task ID to delete.')
